@@ -62,4 +62,11 @@ int main(int argc, const char* argv[])
     }
 
     std::cout << "done: " << sum << std::endl; 
+
+
+    mat3<float> m = mat3<float>::identity();
+    std::cout << m;
+
+    quat<float> q = quat<float>::axis_angle(45.0f, 1.0f, 0.0f, 0.0f);
+    std::cout << q;
 }
