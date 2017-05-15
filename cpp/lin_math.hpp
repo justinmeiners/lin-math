@@ -37,6 +37,17 @@ namespace lin_math
             v[3] = w;
         }
 
+        vec(const vec_type& a)
+        {
+            memcpy(v, a.v, sizeof(T) * N);
+        }
+
+        vec_type& operator=(const vec_type& a)
+        {
+            memcpy(v, a.v, sizeof(T) * N);
+            return *this;
+        }
+
         T& operator[](int i) 
         {
             return v[i];

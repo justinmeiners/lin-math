@@ -197,8 +197,9 @@ LIN_MATH_DEFINE_VEC(float, 2);
 LIN_MATH_DEFINE_VEC(float, 3);
 LIN_MATH_DEFINE_VEC(float, 4);
 
-LIN_MATH_DEFINE_MAT(float, 4);
 
+LIN_MATH_DEFINE_MAT(float, 3);
+LIN_MATH_DEFINE_MAT(float, 4);
 
 static inline void vec3_cross(const float *a, const float *b, float *r)
 {
