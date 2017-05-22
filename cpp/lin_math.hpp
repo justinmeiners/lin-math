@@ -466,7 +466,7 @@ namespace lin_math
         {
             auto j = normalize(target - eye);
             auto i = normalize(cross(forward, up));
-            auto k = cross(basis_side, basis_forward);
+            auto k = cross(i, j);
 
             return basis(i, -j, k) * translate(Vec3_Negate(eye));
         }
@@ -506,6 +506,98 @@ namespace lin_math
                 r.at(j, i) = m.at(i, j);
         return r;
     }
+
+
+    
+    template <typename T>
+    struct quat : public vec<T, 4>
+    {
+
+        using vec<T, 4>::v;
+        mat<T, 4> to_matrix() const
+        {
+            mat<T, 4> m;
+
+            T x2 = T(2.0) * a.x;
+            T y2 = T(2.0) * a.y;
+            T z2 = T(2.0) * a.z;
+            
+            T xy = x2 * v.y;
+            T xz = x2 * v.z;
+            T yy = y2 * v.y;
+            T yw = y2 * v.w;
+            T zw = z2 * v.w;
+            T zz = z2 * v.z;
+           
+            at(0, 0) = T(1.0) - (yy + zz);
+            at(1, 0) = xy - zw;
+            at(2, 0) = xz + yw;
+            at(3, 0) = T();
+
+            T xx = x2 * v.x;
+            T xw = x2 * v.w;
+            T yz = y2 * v.z;
+            
+            at(0, 1) = xy + zw;
+            at(1, 1) = T(1.0) - (xx + zz);
+            at(2, 1) = yz - xw;
+            at(3, 1) = T();
+
+            at(0, 2) = xz - yw;
+            at(1, 2) = yz + xw;
+            at(2, 2) = T(1.0) - (xx + yy);
+            at(3, 2) = T();
+            
+            at(0, 3) = T();
+            at(1, 3) = T();
+            at(2, 3) = T();
+            at(3, 3) = T(1.0);
+            return m;
+        }
+
+        static quat<T> axisAngle(T radians, T x, T y, T Z)
+        {
+            T halfAngle = radians * T(0.5);
+            T sinA = std::sin(halfAngle);
+
+            quat<T> r;
+            r[3] = std::cos(halfAngle);
+            r[0] = x * sinA;
+            r[1] = y * sinA;
+            r[2] = z * sinA;
+            return r;
+        };
+        
+        static quat<T> axisAngle(T radians, const vec<T, 3>& axis)
+        {
+            return axisAngle(radians, axis.x, axis.y, axis.z);
+        }
+    };
+
+
+    template<typename T>
+    quat<T> slerp(T t, const quat<T>& min, const quat<T>& max)
+    {
+        T w1, w2;
+        T cosTheta = dot(min, max);
+        T theta = std::acos(cosTheta);
+        T sinTheta = std::sin(theta);
+
+        if (sinTheta > T(0.0001))
+        {
+            w1 = (std::sin(T(1.0) - t) * theta) / sinTheta;
+            w2 = (std::sin(t * theta) / sinTheta;
+        }
+        else
+        {
+            w1 = T(1.0) - t;
+            w2 = t;
+        }
+
+        return (min * w1) + (max * w2); 
+    }
+
+
 
     template <typename T=float>
     using vec2 = vec<T, 2>;
