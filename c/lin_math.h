@@ -6,6 +6,10 @@
 #include <memory.h>
 
 /*
+ http://www.reedbeta.com/blog/2013/12/28/on-vector-math-libraries/
+ https://github.com/arkanis/single-header-file-c-libs/blob/master/math_3d.h
+ https://github.com/nothings/obbg/blob/master/src/stb_vec.h
+
  typedef array method:
 
     typedef float vector[3];
